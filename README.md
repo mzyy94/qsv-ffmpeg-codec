@@ -4,15 +4,15 @@ qsv-ffmpeg-codec
 Quick sync video as a encode codec in ffmpeg.
 
 ## Requirements
-   * Intel Media SDK 2014 (https://software.intel.com/en-us/vcsource/tools/media-sdk-server)
-   * ubuntu12.04 x64  
+   * Intel Media Server Studio 2015 R3 (https://software.intel.com/en-us/intel-media-server-studio)
+   * CentOS 7.0 x64
 
 ## Build
-   * ./configure --extra-libs="-lmfx -lsupc++ -lstdc++ -ldl -lva -lva-drm" --extra-ldflags="-L/opt/intel/mediasdk/lib" --extra-cflags=
+   * ./configure --extra-libs="-lsupc++ -lstdc++ -ldl -lva -lva-drm" --extra-ldflags="-L/opt/intel/mediasdk/lib" --extra-cflags=
 "-I/opt/intel/mediasdk/include" --prefix="/opt/intel/mediasdk"
 
 ## Support
-   * Intel Media SDK API : v1.1
+   * Intel Media SDK API : v1.13
    * Codec : H.264
 
 ## Codec name
