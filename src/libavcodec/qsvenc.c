@@ -23,7 +23,7 @@
 #include <string.h>
 #include <strings.h>
 #include <sys/types.h>
-#include <mfx/mfxvideo.h>
+#include <mfxvideo.h>
 
 #include <unistd.h>
 #include <fcntl.h>
