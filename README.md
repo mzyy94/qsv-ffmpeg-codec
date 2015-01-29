@@ -8,8 +8,13 @@ Quick sync video as a encode codec in ffmpeg.
    * CentOS 7.0 x64
 
 ## Build
-   * ./configure --extra-libs="-lsupc++ -lstdc++ -ldl -lva -lva-drm" --extra-ldflags="-L/opt/intel/mediasdk/lib" --extra-cflags=
-"-I/opt/intel/mediasdk/include" --prefix="/opt/intel/mediasdk"
+   0. fix library link path: sudo bash -c 'echo "/opt/intel/mediasdk/lib64" >> /etc/ld.so.conf.d/intel-mediasdk.conf; ldconfig'
+   1. need install files: qsv.c  qsvenc.c  qsvenc.h  qsvenc_h264.c  qsv.h
+   2. patch -p1 -d FFmpeg-2.2 < ffmpeg-2.2.12.patch
+   3. cp ./libavcodec/qsv* FFmpeg-2.2/libavcodec/
+   4. cd FFmpeg-2.2
+   5. ./configure --extra-libs="-lsupc++ -lstdc++ -ldl -lva -lva-drm" --extra-ldflags="-L/opt/intel/mediasdk/lib64" --extra-cflags="-I/opt/intel/mediasdk/include" --prefix="/opt/intel/mediasdk"
+   6. make
 
 ## Support
    * Intel Media SDK API : v1.13
