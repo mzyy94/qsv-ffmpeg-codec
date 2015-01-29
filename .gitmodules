@@ -1,0 +1,4 @@
+[submodule "FFmpeg-2.2"]
+	path = FFmpeg-2.2
+	url = https://github.com/FFmpeg/FFmpeg.git
+	branch = release/2.2
