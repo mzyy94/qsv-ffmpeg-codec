@@ -9,9 +9,9 @@ Quick sync video as a encode codec in ffmpeg.
 
 ## Build
    0. fix library link path: sudo bash -c 'echo "/opt/intel/mediasdk/lib64" >> /etc/ld.so.conf.d/intel-mediasdk.conf; ldconfig'
-   1. need install files: qsv.c  qsvenc.c  qsvenc.h  qsvenc_h264.c  qsv.h
+   1. git submodule init && git submodule update
    2. patch -p1 -d FFmpeg-2.2 < ffmpeg-2.2.12.patch
-   3. cp ./libavcodec/qsv* FFmpeg-2.2/libavcodec/
+   3. cp ./src/* ./FFmpeg-2.2/libavcodec/
    4. cd FFmpeg-2.2
    5. ./configure --extra-libs="-lsupc++ -lstdc++ -ldl -lva -lva-drm" --extra-ldflags="-L/opt/intel/mediasdk/lib64" --extra-cflags="-I/opt/intel/mediasdk/include" --prefix="/opt/intel/mediasdk"
    6. make
