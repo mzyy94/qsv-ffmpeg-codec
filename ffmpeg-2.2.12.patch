@@ -1,0 +1,72 @@
+diff -ur FFmpeg-2.2/configure src/configure
+--- FFmpeg-2.2/configure	2015-01-30 05:09:43.560423920 +0900
++++ src/configure	2015-01-30 05:07:24.705705889 +0900
+@@ -213,6 +213,7 @@
+   --enable-libgsm          enable GSM de/encoding via libgsm [no]
+   --enable-libiec61883     enable iec61883 via libiec61883 [no]
+   --enable-libilbc         enable iLBC de/encoding via libilbc [no]
++  --disable-libmfxhw64     disable H.264 hardware encoding via libmfxhw64 [autodetect]
+   --enable-libmodplug      enable ModPlug via libmodplug [no]
+   --enable-libmp3lame      enable MP3 encoding via libmp3lame [no]
+   --enable-libnut          enable NUT (de)muxing via libnut,
+@@ -1284,6 +1285,7 @@
+     libgsm
+     libiec61883
+     libilbc
++    libmfxhw64
+     libmodplug
+     libmp3lame
+     libnut
+@@ -2094,6 +2096,7 @@
+ h264_vdpau_decoder_select="h264_decoder"
+ h264_vdpau_hwaccel_deps="vdpau"
+ h264_vdpau_hwaccel_select="h264_decoder"
++h264_qsv_encoder_select="libmfxhw64"
+ mpeg_vdpau_decoder_deps="vdpau"
+ mpeg_vdpau_decoder_select="mpeg2video_decoder"
+ mpeg_xvmc_hwaccel_deps="xvmc"
+@@ -2158,6 +2161,7 @@
+ libgsm_ms_encoder_deps="libgsm"
+ libilbc_decoder_deps="libilbc"
+ libilbc_encoder_deps="libilbc"
++libmfxhw64_encoder_deps="libmfxhw64"
+ libmodplug_demuxer_deps="libmodplug"
+ libmp3lame_encoder_deps="libmp3lame"
+ libmp3lame_encoder_select="audio_frame_queue"
+@@ -4666,6 +4670,9 @@
+ # Funny iconv installations are not unusual, so check it after all flags have been set
+ disabled iconv || check_func_headers iconv.h iconv || check_lib2 iconv.h iconv -liconv || disable iconv
+ 
++# Intel QSV encoder option is enabled by default when all requirements are fulfilled.
++disabled libmfxhw64 || check_lib mfxvideo.h MFXInit -lmfxhw64 || disable libmfxhw64
++
+ enabled debug && add_cflags -g"$debuglevel" && add_asflags -g"$debuglevel"
+ 
+ # add some useful compiler flags if supported
+diff -ur FFmpeg-2.2/libavcodec/Makefile src/libavcodec/Makefile
+--- FFmpeg-2.2/libavcodec/Makefile	2015-01-30 05:11:24.224237015 +0900
++++ src/libavcodec/Makefile	2015-01-30 02:36:45.376467165 +0900
+@@ -237,6 +237,7 @@
+                                           cabac.o h264_sei.o h264_ps.o         \
+                                           h264_refs.o h264_cavlc.o h264_cabac.o
+ OBJS-$(CONFIG_H264_VDA_DECODER)        += vda_h264_dec.o
++OBJS-$(CONFIG_H264_QSV_ENCODER)        += qsvenc_h264.o qsvenc.o qsv.o
+ OBJS-$(CONFIG_HEVC_DECODER)            += hevc.o hevc_mvs.o hevc_ps.o hevc_sei.o \
+                                           hevc_cabac.o hevc_refs.o hevcpred.o    \
+                                           hevcdsp.o hevc_filter.o cabac.o
+diff -ur FFmpeg-2.2/libavcodec/allcodecs.c src/libavcodec/allcodecs.c
+--- FFmpeg-2.2/libavcodec/allcodecs.c	2015-01-30 05:03:26.482103610 +0900
++++ src/libavcodec/allcodecs.c	2015-01-30 02:36:45.376467165 +0900
+@@ -168,6 +168,7 @@
+     REGISTER_DECODER(H264_CRYSTALHD,    h264_crystalhd);
+     REGISTER_DECODER(H264_VDA,          h264_vda);
+     REGISTER_DECODER(H264_VDPAU,        h264_vdpau);
++    REGISTER_ENCODER(H264_QSV,          h264_qsv);
+     REGISTER_DECODER(HEVC,              hevc);
+     REGISTER_DECODER(HNM4_VIDEO,        hnm4_video);
+     REGISTER_ENCDEC (HUFFYUV,           huffyuv);
+Only in src/libavcodec: qsv.c
+Only in src/libavcodec: qsv.h
+Only in src/libavcodec: qsvenc.c
+Only in src/libavcodec: qsvenc.h
+Only in src/libavcodec: qsvenc_h264.c
