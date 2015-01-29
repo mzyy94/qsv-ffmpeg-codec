@@ -1,6 +1,7 @@
 
 
 
+0. fix library link path: sudo bash -c 'echo "/opt/intel/mediasdk/lib64" >> /etc/ld.so.conf.d/intel-mediasdk.conf; ldconfig'
 1. need install files: allcodecs.c  Makefile  qsv.c  qsvenc.c  qsvenc.h  qsvenc_h264.c  qsv.h
 2. cp *  ffmpeg-2.2/libavcodec/
 3. cd ffmpeg-2.2
