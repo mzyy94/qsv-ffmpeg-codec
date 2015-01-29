@@ -1,4 +1,4 @@
-qsv-ffmpeg-codec
+qsv_h264-ffmpeg
 ================
 
 Quick sync video as a encode codec in ffmpeg.
