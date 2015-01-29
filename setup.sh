@@ -3,6 +3,7 @@
 SRC_DIR="src"
 FFMPEG_DIR="FFmpeg-2.2"
 PATCH_FILE="ffmpeg-2.2.12.patch"
+IMSS_DIR="/opt/intel/mediasdk"
 
 function info() {
     echo -e "\033[1m$@\033[0;39m"
@@ -42,7 +43,7 @@ info 'Changing current directory...'
 run cd ${FFMPEG_DIR}
 
 info 'Configuring FFmpeg...'
-run ./configure --extra-libs=\"-lsupc++ -lstdc++ -ldl -lva -lva-drm\" --extra-ldflags=\"-L/opt/intel/mediasdk/lib64\" --extra-cflags=\"-I/opt/intel/mediasdk/include\" --prefix=\"/opt/intel/mediasdk\"
+run ./configure --extra-libs=\"-lsupc++ -lstdc++ -ldl -lva -lva-drm\" --extra-ldflags=\"-L${IMSS_DIR}/lib64\" --extra-cflags=\"-I${IMSS_DIR}/include\" --prefix=\"${IMSS_DIR}\"
 
 info 'Checking QSV option in config.h...'
 (grep -i qsv config.h | grep 1 > /dev/null) &&
